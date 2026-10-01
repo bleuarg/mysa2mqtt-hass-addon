@@ -1,25 +1,43 @@
 # Mysa2MQTT Home Assistant Add-on
 
-[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fitsamenathan%2Fmysa2mqtt-hass-addon)
+[![Open your Home Assistant instance and show the add add-on repository dialog with a specific repository URL pre-filled.](https://my.home-assistant.io/badges/supervisor_add_addon_repository.svg)](https://my.home-assistant.io/redirect/supervisor_add_addon_repository/?repository_url=https%3A%2F%2Fgithub.com%2Fbleuarg%2Fmysa2mqtt-hass-addon)
 
 Expose your Mysa smart thermostats to Home Assistant via MQTT. This add-on wraps the [mysa2mqtt](https://github.com/bourquep/mysa2mqtt) bridge and publishes
 climate and sensor entities using MQTT discovery, so devices show up automatically in Home Assistant.
 
+## Why this fork
+
+This is a fork of [itsamenathan/mysa2mqtt-hass-addon](https://github.com/itsamenathan/mysa2mqtt-hass-addon),
+which has had no commits since January 2026. The original no longer works on current Home Assistant releases:
+
+- It builds from `$BUILD_FROM`, which Supervisor 2026.04.0 and later no longer provide, so the image fails to build.
+- It pins mysa2mqtt 1.2.2. The upstream bridge is now at 3.2.6.
+- It maps the whole Home Assistant `/config` directory read/write, including `secrets.yaml`, only to store a
+  session file that mysa2mqtt no longer uses.
+
+This fork changes the following:
+
+- Builds from a pinned `ghcr.io/home-assistant/base` image and supports `aarch64` and `amd64` only, the two
+  architectures that image is published for.
+- Updates mysa2mqtt to 3.2.6 and removes the session file option.
+- Doesn't map any host directories.
+- Gets the MQTT broker and its credentials from the Supervisor by default, so the Mosquitto add-on works without
+  extra setup.
+
+The original is MIT licensed, and so is this fork. Credit for the add-on goes to its original author, and for the
+bridge to [bourquep/mysa2mqtt](https://github.com/bourquep/mysa2mqtt).
+
 ## Installation
 
 1. In Home Assistant: Settings → Add-ons → Add-on Store → ⋮ (top right) → Repositories.
-2. Add the repository URL: `https://github.com/itsamenathan/mysa2mqtt-hass-addon`.
+2. Add the repository URL: `https://github.com/bleuarg/mysa2mqtt-hass-addon`.
 3. Install **Mysa2MQTT** from the list and open the add-on.
 
 ## Configuration
 
-Set your Mysa credentials and MQTT details, then save and start the add-on. Defaults are shown below:
+Set your Mysa credentials, then save and start the add-on. Defaults are shown below:
 
 ```yaml
-mqtt_host: core-mosquitto     # required; your MQTT broker host/IP
-mqtt_port: 1883
-mqtt_username: ""             # optional
-mqtt_password: ""             # optional
 mqtt_topic_prefix: mysa2mqtt
 mqtt_client_name: mysa2mqtt
 mysa_username: ""             # required; your Mysa account email
@@ -27,14 +45,27 @@ mysa_password: ""             # required; your Mysa account password
 log_level: info               # silent|fatal|error|warn|info|debug|trace
 log_format: pretty            # pretty|json
 temperature_unit: C           # C|F; must match your Home Assistant unit system
-mysa_session_file: /config/mysa2mqtt/session.json
 ```
+
+### MQTT broker
+
+If you run the Mosquitto broker add-on, leave the MQTT options unset. The add-on gets the broker address and
+credentials from the Supervisor.
+
+To use a different broker, set these options:
+
+```yaml
+mqtt_host: 192.168.1.10       # broker host name or IP address
+mqtt_port: 1883               # optional, defaults to 1883
+mqtt_username: ""             # optional
+mqtt_password: ""             # optional
+```
+
+When `mqtt_host` is set, the add-on ignores the Supervisor's broker and uses only these options.
 
 Important notes:
 
-- The Mysa session is stored at `mysa_session_file` so you stay logged in across restarts.
 - `temperature_unit` must match Home Assistant (Settings → System → General) to avoid incorrect setpoints.
-- If your broker requires auth, set both `mqtt_username` and `mqtt_password`.
 
 ## Usage
 
@@ -46,7 +77,6 @@ After starting the add-on:
 ## Troubleshooting
 
 - Check the add-on logs for connection or authentication errors.
-- Delete the `mysa_session_file` path if you need to force a fresh Mysa login.
 - Ensure your MQTT broker is reachable from Home Assistant and credentials are correct.
 
 ## Support

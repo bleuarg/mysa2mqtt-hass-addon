@@ -13,13 +13,9 @@ climate and sensor entities using MQTT discovery, so devices show up automatical
 
 ## Configuration
 
-Set your Mysa credentials and MQTT details, then save and start the add-on. Defaults are shown below:
+Set your Mysa credentials, then save and start the add-on. Defaults are shown below:
 
 ```yaml
-mqtt_host: core-mosquitto     # required; your MQTT broker host/IP
-mqtt_port: 1883
-mqtt_username: ""             # optional
-mqtt_password: ""             # optional
 mqtt_topic_prefix: mysa2mqtt
 mqtt_client_name: mysa2mqtt
 mysa_username: ""             # required; your Mysa account email
@@ -29,10 +25,25 @@ log_format: pretty            # pretty|json
 temperature_unit: C           # C|F; must match your Home Assistant unit system
 ```
 
+### MQTT broker
+
+If you run the Mosquitto broker add-on, leave the MQTT options unset. The add-on gets the broker address and
+credentials from the Supervisor.
+
+To use a different broker, set these options:
+
+```yaml
+mqtt_host: 192.168.1.10       # broker host name or IP address
+mqtt_port: 1883               # optional, defaults to 1883
+mqtt_username: ""             # optional
+mqtt_password: ""             # optional
+```
+
+When `mqtt_host` is set, the add-on ignores the Supervisor's broker and uses only these options.
+
 Important notes:
 
 - `temperature_unit` must match Home Assistant (Settings → System → General) to avoid incorrect setpoints.
-- If your broker requires auth, set both `mqtt_username` and `mqtt_password`.
 
 ## Usage
 

@@ -9,11 +9,9 @@ arch:
 panel_icon: "mdi:radiator"
 panel_title: "Mysa2MQTT"
 init: false
+services:
+  - mqtt:want
 options:
-  mqtt_host: "core-mosquitto"
-  mqtt_port: 1883
-  mqtt_username: ""
-  mqtt_password: ""
   mqtt_topic_prefix: "mysa2mqtt"
   mqtt_client_name: "mysa2mqtt"
   mysa_username: ""
@@ -22,8 +20,8 @@ options:
   log_format: "pretty"
   temperature_unit: "C"
 schema:
-  mqtt_host: str
-  mqtt_port: int
+  mqtt_host: str?
+  mqtt_port: port?
   mqtt_username: str?
   mqtt_password: password?
   mqtt_topic_prefix: str

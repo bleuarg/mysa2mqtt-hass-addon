@@ -9,9 +9,6 @@ arch:
 panel_icon: "mdi:radiator"
 panel_title: "Mysa2MQTT"
 init: false
-map:
-  - data:rw
-  - config:rw
 options:
   mqtt_host: "core-mosquitto"
   mqtt_port: 1883

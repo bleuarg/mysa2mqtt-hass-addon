@@ -24,7 +24,6 @@ options:
   log_level: "info"
   log_format: "pretty"
   temperature_unit: "C"
-  mysa_session_file: "/config/mysa2mqtt/session.json"
 schema:
   mqtt_host: str
   mqtt_port: int
@@ -37,4 +36,3 @@ schema:
   log_level: list(silent|fatal|error|warn|info|debug|trace)
   log_format: list(pretty|json)
   temperature_unit: list(C|F)
-  mysa_session_file: str

@@ -27,12 +27,10 @@ mysa_password: ""             # required; your Mysa account password
 log_level: info               # silent|fatal|error|warn|info|debug|trace
 log_format: pretty            # pretty|json
 temperature_unit: C           # C|F; must match your Home Assistant unit system
-mysa_session_file: /config/mysa2mqtt/session.json
 ```
 
 Important notes:
 
-- The Mysa session is stored at `mysa_session_file` so you stay logged in across restarts.
 - `temperature_unit` must match Home Assistant (Settings → System → General) to avoid incorrect setpoints.
 - If your broker requires auth, set both `mqtt_username` and `mqtt_password`.
 
@@ -46,7 +44,6 @@ After starting the add-on:
 ## Troubleshooting
 
 - Check the add-on logs for connection or authentication errors.
-- Delete the `mysa_session_file` path if you need to force a fresh Mysa login.
 - Ensure your MQTT broker is reachable from Home Assistant and credentials are correct.
 
 ## Support

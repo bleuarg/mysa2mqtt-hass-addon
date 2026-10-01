@@ -21,8 +21,6 @@ export M2M_MYSA_PASSWORD="$(bashio::config 'mysa_password')"
 export M2M_LOG_LEVEL="$(bashio::config 'log_level')"
 export M2M_LOG_FORMAT="$(bashio::config 'log_format')"
 export M2M_TEMPERATURE_UNIT="$(bashio::config 'temperature_unit')"
-export M2M_MYSA_SESSION_FILE="$(bashio::config 'mysa_session_file')"
-mkdir -p "$(dirname "$M2M_MYSA_SESSION_FILE")"
 
 if bashio::config.has_value 'mqtt_username'; then
   export M2M_MQTT_USERNAME="$(bashio::config 'mqtt_username')"
